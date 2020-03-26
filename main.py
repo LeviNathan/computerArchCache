@@ -58,26 +58,35 @@ if '-r' in sys.argv:
     if policy not in ['RR', 'RND', 'LRU']:
         sys.exit("Error: Invalid replacement policy. (RR, RND, or LRU)")
 
+print('Trace File: %s' % (file))
+print('Cache Size: %d' % (cacheSize))
+print('Block Size: %d' % (blockSize))
+print('Associativity: %d-way' % (associativity))
+print('R-Policy: %s' % (policy))
+print('------------------------------------------')
+
 print('Cache Size: %d' % (cacheSize))
 print('Block Size: %d' % (blockSize))
 print('Associativity: %d' % (associativity))
-print('Policy: %s\n' % (policy))
+print('Policy: %s' % (policy))
+print('------------------------------------------')
 
-powerOf2 = [2 ** x  for x in range(0,17)]
-powerOfBytes = [2**10, 2**20, 2**30]
-totBlocks = cacheSize / blockSize
-power = powerOf2.index(totBlocks)
-print('Total #Blocks: %d KB (2^ %d)' % (totBlocks, power))
+powerOf2 = [2 ** x  for x in range(0,28)]
 
-tagBits = 0
-print('Tag Size: %d bits' % (tagBits))
+cache = cacheSize * 2**10
 
-totIndices = cacheSize / (blockSize * associativity)
-indexSize = powerOf2.index(totIndices) + 10
-print('Index Size: %d bits, Total Indices: %d KB' % (indexSize, totIndices))
+offset = blockSize
+totIndices = cache / (blockSize * associativity)
+indexSize = powerOf2.index(totIndices)
+totBlocks = totIndices * associativity
+tagBits = 32 - indexSize - powerOf2.index(blockSize)
 
-overheadSize = 0
-print('Overhead Memory Size: %d bytes' % (overheadSize))
-
+overheadSize = ((tagBits + 1) * totBlocks)/8
 memorySize = 0
+
+print('Tag Size: %d bits' % (tagBits))
+print('Total #Blocks: %d bytes (2^ %d)' % (totBlocks, powerOf2.index(totBlocks)))
+print('Index Size: %d bits, Total Indices: %d bytes' % (indexSize, totIndices))
+print('Overhead Memory Size: %d bytes' % (overheadSize))
 print('Implementation Memory Size: %d bytes' % (memorySize))
+print('------------------------------------------')
