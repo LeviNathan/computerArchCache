@@ -50,3 +50,9 @@ if '-r' in sys.argv:
     if replacement not in ['RR', 'RND', 'LRU']:
         sys.exit("Error: Invalid replacement policy. (RR, RND, or LRU)")
 
+print("Cache Simulator CS 3853 Spring 2020 - Group #12\n")
+print("Trace File: " + file)
+print("Cache Size: {} KB".format(cacheSize))
+print("Block Size: {} Bytes".format(blockSize) )
+print("Associativity: {}".format(associativity))
+print("Replacement Policy: " + replacement)
