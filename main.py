@@ -65,6 +65,8 @@ print("Block Size: {} Bytes".format(blockSize) )
 print("Associativity: {}".format(associativity))
 print("Replacement Policy: " + replacement)
 
+
+#Milestone 2
 powerOf2 = [2 ** x  for x in range(0,17)]
 powerOfBytes = [2**10, 2**20, 2**30]
 totBlocks = cacheSize / blockSize
