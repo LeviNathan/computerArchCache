@@ -31,22 +31,53 @@ try:
     cacheSize = int(cacheSize)
 except ValueError:
     sys.exit("Error: Invalid cache size, make sure it is an integer.")
+if cacheSize < 2*10 and cacheSize > 2**23:
+    sys.exit("Error: Cache out of range. 1KB(1024) to 8MB(8388608)")
+
 
 blockSize = sys.argv[sys.argv.index('-b') + 1]
 try:
     blockSize = int(blockSize)
 except ValueError:
     sys.exit("Error: Invalid block size, make sure it is an integer.")
+if blockSize < 4 and blockSize > 64:
+    sys.exit("Error: Block size out of range. 4 to 16 bytes")
+
 
 associativity = sys.argv[sys.argv.index('-a') + 1]
 try:
     associativity = int(associativity)
 except ValueError:
     sys.exit("Error: Invalid associativity, make sure it is an integer.")
+if not associativity in [2**x for x in range(0,5)]:
+    sys.exit("Error: Invalid Associativity")
 
-replacement = 'RR'
+policy = 'RR'
 if '-r' in sys.argv:
-    replacement = sys.argv[sys.argv.index('-r') + 1]
-    if replacement not in ['RR', 'RND', 'LRU']:
+    policy = sys.argv[sys.argv.index('-r') + 1]
+    if policy not in ['RR', 'RND', 'LRU']:
         sys.exit("Error: Invalid replacement policy. (RR, RND, or LRU)")
 
+print('Cache Size: %d' % (cacheSize))
+print('Block Size: %d' % (blockSize))
+print('Associativity: %d' % (associativity))
+print('Policy: %s\n' % (policy))
+
+powerOf2 = [2 ** x  for x in range(0,17)]
+powerOfBytes = [2**10, 2**20, 2**30]
+totBlocks = cacheSize / blockSize
+power = powerOf2.index(totBlocks)
+print('Total #Blocks: %d KB (2^ %d)' % (totBlocks, power))
+
+tagBits = 0
+print('Tag Size: %d bits' % (tagBits))
+
+totIndices = cacheSize / (blockSize * associativity)
+indexSize = powerOf2.index(totIndices) + 10
+print('Index Size: %d bits, Total Indices: %d KB' % (indexSize, totIndices))
+
+overheadSize = 0
+print('Overhead Memory Size: %d bytes' % (overheadSize))
+
+memorySize = 0
+print('Implementation Memory Size: %d bytes' % (memorySize))
