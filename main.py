@@ -44,7 +44,7 @@ try:
 except ValueError:
     sys.exit("Error: Invalid associativity, make sure it is an integer.")
 
-replacement = None
+replacement = 'RR'
 if '-r' in sys.argv:
     replacement = sys.argv[sys.argv.index('-r') + 1]
     if replacement not in ['RR', 'RND', 'LRU']:
