@@ -58,18 +58,12 @@ if '-r' in sys.argv:
     if policy not in ['RR', 'RND', 'LRU']:
         sys.exit("Error: Invalid replacement policy. (RR, RND, or LRU)")
 
-<<<<<<< HEAD
 print("Cache Simulator CS 3853 Spring 2020 - Group #12\n")
 print("Trace File: " + file)
 print("Cache Size: {} KB".format(cacheSize))
 print("Block Size: {} Bytes".format(blockSize) )
 print("Associativity: {}".format(associativity))
 print("Replacement Policy: " + replacement)
-=======
-print('Cache Size: %d' % (cacheSize))
-print('Block Size: %d' % (blockSize))
-print('Associativity: %d' % (associativity))
-print('Policy: %s\n' % (policy))
 
 powerOf2 = [2 ** x  for x in range(0,17)]
 powerOfBytes = [2**10, 2**20, 2**30]
@@ -89,4 +83,3 @@ print('Overhead Memory Size: %d bytes' % (overheadSize))
 
 memorySize = 0
 print('Implementation Memory Size: %d bytes' % (memorySize))
->>>>>>> ecc7e831ead77dbddb4282d8fd66b7dbabc23476
