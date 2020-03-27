@@ -59,6 +59,8 @@ if '-r' in sys.argv:
         sys.exit("Error: Invalid replacement policy. (RR, RND, or LRU)")
 
 print("Cache Simulator CS 3853 Spring 2020 - Group #12\n")
+print(" ".join(sys.argv))
+print(sys.argv)
 print('Trace File: %s' % (file))
 print('Cache Size: %d' % (cacheSize))
 print('Block Size: %d' % (blockSize))
@@ -74,20 +76,35 @@ print('------------------------------------------')
 
 powerOf2 = [2 ** x  for x in range(0,28)]
 
-cache = cacheSize * 2**10
-
 offset = blockSize
-totIndices = cache / (blockSize * associativity)
+totIndices = cacheSize * 2**10 / (blockSize * associativity)
 indexSize = powerOf2.index(totIndices)
 totBlocks = totIndices * associativity
 tagBits = 32 - indexSize - powerOf2.index(blockSize)
 
 overheadSize = ((tagBits + 1) * totBlocks)/8
-memorySize = 0
+memorySize = cacheSize * 2**10 + overheadSize
 
 print('Tag Size: %d bits' % (tagBits))
-print('Total #Blocks: %d bytes (2^ %d)' % (totBlocks, powerOf2.index(totBlocks)))
-print('Index Size: %d bits, Total Indices: %d bytes' % (indexSize, totIndices))
+print('Total #Blocks: %d KB (2^ %d)' % (totBlocks/2**10, powerOf2.index(totBlocks)))
+print('Index Size: %d bits, Total Indices: %d KB' % (indexSize, totIndices/2**10))
 print('Overhead Memory Size: %d bytes' % (overheadSize))
 print('Implementation Memory Size: %d bytes' % (memorySize))
 print('------------------------------------------')
+
+
+print("Cache Hit Rate: {} %".format('nn.n'))
+print("CPI: {}".format('nn.nn'))
+print("Cost: ${}".format('nnnn.nn'))
+print("Ununsed Cache Space: {} KB / {} %\n".format('nn', 'nn.n'))
+
+
+with open(file, "r") as fp:
+    lines = fp.readlines()
+    lines = lines[0::3]
+    
+    for i in range(0,20):
+        print("0x%x: (%d)" % (lines[i][10:18], lines[i][5:7]))
+    #for line in lines:
+    #    lines[lines.index(line)] = line[:17]
+
