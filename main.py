@@ -91,3 +91,13 @@ print('Index Size: %d bits, Total Indices: %d bytes' % (indexSize, totIndices))
 print('Overhead Memory Size: %d bytes' % (overheadSize))
 print('Implementation Memory Size: %d bytes' % (memorySize))
 print('------------------------------------------')
+
+#print first 20 addresses and the length
+with open(file) as f:
+    num_of_address = 0
+    for line in f:
+        if(line[:3] == "EIP" and num_of_address < 20):
+            length = line[5:7]
+            hex_address = line[10:18] 
+            num_of_address += 1
+            print("0x%s: %s" % (hex_address, length))
