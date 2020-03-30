@@ -98,13 +98,12 @@ print("CPI: {}".format('nn.nn'))
 print("Cost: ${}".format('nnnn.nn'))
 print("Ununsed Cache Space: {} KB / {} %\n".format('nn', 'nn.n'))
 
-
-with open(file, "r") as fp:
-    lines = fp.readlines()
-    lines = lines[0::3]
-    
-    for i in range(0,20):
-        print("0x%x: (%d)" % (lines[i][10:18], lines[i][5:7]))
-    #for line in lines:
-    #    lines[lines.index(line)] = line[:17]
-
+#print first 20 addresses and the length
+with open(file) as f:
+    num_of_address = 0
+    for line in f:
+        if(line[:3] == "EIP" and num_of_address < 20):
+            length = line[5:7]
+            hex_address = line[10:18] 
+            num_of_address += 1
+            print("0x%s: %s" % (hex_address, length))
