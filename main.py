@@ -52,27 +52,23 @@ except ValueError:
 if not associativity in [2**x for x in range(0,5)]:
     sys.exit("Error: Invalid Associativity")
 
+policyDict = {'RR': 'Round Robin', 'RND': 'Random', 'LRU': 'Least Recently Used'}
+
 policy = 'RR'
 if '-r' in sys.argv:
     policy = sys.argv[sys.argv.index('-r') + 1]
-    if policy not in ['RR', 'RND', 'LRU']:
+    if policy not in policyDict:
         sys.exit("Error: Invalid replacement policy. (RR, RND, or LRU)")
+    else:
+        policy = policyDict[sys.argv[sys.argv.index('-r') + 1]]
 
-print("Cache Simulator CS 3853 Spring 2020 - Group #12\n")
-print(" ".join(sys.argv))
-print(sys.argv)
-print('Trace File: %s' % (file))
-print('Cache Size: %d' % (cacheSize))
-print('Block Size: %d' % (blockSize))
-print('Associativity: %d-way' % (associativity))
-print('R-Policy: %s' % (policy))
-print('------------------------------------------')
-
-print("Cache Size: {} KB".format(cacheSize))
-print("Block Size: {} Bytes".format(blockSize) )
-print("Associativity: {}".format(associativity))
-print("Replacement Policy: " + policy)
-print('------------------------------------------')
+print("Cache Simulator - CS 3853 - Team 12\n")
+print('Trace File: %s\n' % (file))
+print("***** Cache Input Parameters ***** \n")
+print('Cache Size: \t\t\t{} KB'.format(cacheSize))
+print('Block Size: \t\t\t{} bytes'.format(blockSize))
+print('Associativity: \t\t\t{}'.format(associativity))
+print('Replacement Policy: \t\t{}\n'.format(policy))
 
 powerOf2 = [2 ** x  for x in range(0,28)]
 
@@ -84,20 +80,19 @@ tagBits = 32 - indexSize - powerOf2.index(blockSize)
 
 overheadSize = ((tagBits + 1) * totBlocks)/8
 memorySize = cacheSize * 2**10 + overheadSize
+totRows = totBlocks/associativity
+cost = 0
+print("***** Cache Calculated Values *****\n")
 
-print('Tag Size: %d bits' % (tagBits))
-print('Total #Blocks: %d KB (2^ %d)' % (totBlocks/2**10, powerOf2.index(totBlocks)))
-print('Index Size: %d bits, Total Indices: %d KB' % (indexSize, totIndices/2**10))
-print('Overhead Memory Size: %d bytes' % (overheadSize))
-print('Implementation Memory Size: %d bytes' % (memorySize))
-print('------------------------------------------')
+print('Total #Blocks: \t\t\t{}'.format(int(totBlocks)))
+print('Tag Size: \t\t\t{} bits'.format(tagBits))
+print('Index Size: \t\t\t{} bits'.format(indexSize))
+print('Total # Rows: \t\t\t{}'.format(int(totRows)))
+print('Overhead Memory Size: \t\t{} bytes'.format(int(overheadSize)))
+print('Implementation Memory Size: \t{:.2f} KB ({} bytes)'.format(float(memorySize/2**10), int(memorySize)))
+print('Cost: \t\t\t\t${:.2f}\n'.format(cost))
 
-
-print("Cache Hit Rate: {} %".format('nn.n'))
-print("CPI: {}".format('nn.nn'))
-print("Cost: ${}".format('nnnn.nn'))
-print("Ununsed Cache Space: {} KB / {} %\n".format('nn', 'nn.n'))
-
+"""
 #print first 20 addresses and the length
 with open(file) as f:
     num_of_address = 0
@@ -106,4 +101,5 @@ with open(file) as f:
             length = line[5:7]
             hex_address = line[10:18] 
             num_of_address += 1
-            print("0x%s: %s" % (hex_address, length))
+            print("0x{}: ({})".format(hex_address, length))
+"""
