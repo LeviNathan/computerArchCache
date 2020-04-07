@@ -64,7 +64,7 @@ if '-r' in sys.argv:
         policy = policyDict[sys.argv[sys.argv.index('-r') + 1]]
 
 print("Cache Simulator - CS 3853 - Team 12\n")
-print('Trace File: %s\n' % (file))
+print('Trace File: {}\n'.format(file))
 print("***** Cache Input Parameters ***** \n")
 print('Cache Size: \t\t\t{} KB'.format(cacheSize))
 print('Block Size: \t\t\t{} bytes'.format(blockSize))
