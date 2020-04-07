@@ -2,6 +2,7 @@
 
 import sys
 import os
+import math
 
 """
 Your simulator will have the following input parameters: 
@@ -98,7 +99,8 @@ with open(file) as f:
     num_of_address = 0
     for line in f:
         if(line[:3] == "EIP" and num_of_address < 20):
-            length = line[5:7]
+            #Bytes to decimal
+            length = str(int(math.pow(2,int(line[5:7])*8)))
             hex_address = line[10:18] 
             num_of_address += 1
             print("0x{}: ({})".format(hex_address, length))
