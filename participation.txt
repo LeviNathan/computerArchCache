@@ -1,2 +1,3 @@
 Dustin Huynh: Helped with the outputs for Trace file, Cache Size, Block size, Associativity, and Replacement Policy. Parsed the first 20 addresses and lengths then converted the lengths to decimal and printed the addresses and lengths.
 Nathan Chan: Did the calculations, parsed the command line, some error checking.
+Alex Pinedo: Just reviewed the work of peers and barely any error checking. 
