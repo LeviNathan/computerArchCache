@@ -31,8 +31,8 @@ try:
     cacheSize = int(cacheSize)
 except ValueError:
     sys.exit("Error: Invalid cache size, make sure it is an integer.")
-if cacheSize < 2*10 and cacheSize > 2**23:
-    sys.exit("Error: Cache out of range. 1KB(1024) to 8MB(8388608)")
+if cacheSize < 1 or cacheSize > 8192:
+    sys.exit("Error: Cache out of range. 1KB to 8192KB(8MB)")
 
 
 blockSize = sys.argv[sys.argv.index('-b') + 1]
@@ -40,7 +40,7 @@ try:
     blockSize = int(blockSize)
 except ValueError:
     sys.exit("Error: Invalid block size, make sure it is an integer.")
-if blockSize < 4 and blockSize > 64:
+if blockSize < 4 or blockSize > 64:
     sys.exit("Error: Block size out of range. 4 to 16 bytes")
 
 
@@ -81,10 +81,11 @@ tagBits = 32 - indexSize - powerOf2.index(blockSize)
 overheadSize = ((tagBits + 1) * totBlocks)/8
 memorySize = cacheSize * 2**10 + overheadSize
 totRows = totBlocks/associativity
-cost = 0
+cost = (cacheSize + overheadSize/2**10) * 0.05
+
 print("***** Cache Calculated Values *****\n")
 
-print('Total #Blocks: \t\t\t{}'.format(int(totBlocks)))
+print('Total # Blocks: \t\t{}'.format(int(totBlocks)))
 print('Tag Size: \t\t\t{} bits'.format(tagBits))
 print('Index Size: \t\t\t{} bits'.format(indexSize))
 print('Total # Rows: \t\t\t{}'.format(int(totRows)))
@@ -92,7 +93,6 @@ print('Overhead Memory Size: \t\t{} bytes'.format(int(overheadSize)))
 print('Implementation Memory Size: \t{:.2f} KB ({} bytes)'.format(float(memorySize/2**10), int(memorySize)))
 print('Cost: \t\t\t\t${:.2f}\n'.format(cost))
 
-"""
 #print first 20 addresses and the length
 with open(file) as f:
     num_of_address = 0
@@ -102,4 +102,3 @@ with open(file) as f:
             hex_address = line[10:18] 
             num_of_address += 1
             print("0x{}: ({})".format(hex_address, length))
-"""
