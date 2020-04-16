@@ -64,12 +64,12 @@ if '-r' in sys.argv:
         policy = policyDict[sys.argv[sys.argv.index('-r') + 1]]
 
 print("Cache Simulator - CS 3853 - Team 12\n")
-print('Trace File: {}\n'.format(file))
-print("***** Cache Input Parameters ***** \n")
+print('Trace File: {}'.format(file))
+print("\n***** Cache Input Parameters ***** \n")
 print('Cache Size: \t\t\t{} KB'.format(cacheSize))
 print('Block Size: \t\t\t{} bytes'.format(blockSize))
 print('Associativity: \t\t\t{}'.format(associativity))
-print('Replacement Policy: \t\t{}\n'.format(policy))
+print('Replacement Policy: \t\t{}'.format(policy))
 
 powerOf2 = [2 ** x  for x in range(0,28)]
 
@@ -84,7 +84,7 @@ memorySize = cacheSize * 2**10 + overheadSize
 totRows = totBlocks/associativity
 cost = (cacheSize + overheadSize/2**10) * 0.05
 
-print("***** Cache Calculated Values *****\n")
+print("\n***** Cache Calculated Values *****\n")
 
 print('Total # Blocks: \t\t{}'.format(int(totBlocks)))
 print('Tag Size: \t\t\t{} bits'.format(tagBits))
@@ -92,15 +92,33 @@ print('Index Size: \t\t\t{} bits'.format(indexSize))
 print('Total # Rows: \t\t\t{}'.format(int(totRows)))
 print('Overhead Memory Size: \t\t{} bytes'.format(int(overheadSize)))
 print('Implementation Memory Size: \t{:.2f} KB ({} bytes)'.format(float(memorySize/2**10), int(memorySize)))
-print('Cost: \t\t\t\t${:.2f}\n'.format(cost))
+print('Cost: \t\t\t\t${:.2f}'.format(cost))
+
 
 #print first 20 addresses and the length
 with open(file) as f:
     num_of_address = 0
     for line in f:
         if(line[:3] == "EIP" and num_of_address < 20):
+            """
             #Bytes to decimal
             length = str(int(math.pow(2,int(line[5:7])*8)-1))
             hex_address = line[10:18] 
             num_of_address += 1
             print("0x{}: ({})".format(hex_address, length))
+            """
+
+print("\n\n***** Cache Calculated Values *****\n")
+
+print("Total Cache Accesses:\t{}".format(0))
+print("Cache Hits: \t{}".format(0))
+print("Cache Misses: \t\t{}".format(0))
+print("--- Compulsory Misses:\t{}".format(0))
+print("--- Conflict Misses:\t{}".format(0))
+
+print("\n\n***** *****  CACHE MISS RATE:  ***** *****\n")
+
+print("Hit Rate:\t\t{}".format(0))
+print("CPI:\t\t\t{}".format(0))
+print("Unused Cache Space: {} KB / {} KB = {} %  Waste: {}".format(0, 0,0,0))
+print("Unused Cache Blocks:	{} / {}".format(0, 0))
