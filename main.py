@@ -3,6 +3,7 @@
 import sys
 import os
 import math
+from random import randint
 
 """
 Your simulator will have the following input parameters: 
@@ -94,31 +95,83 @@ print('Overhead Memory Size: \t\t{} bytes'.format(int(overheadSize)))
 print('Implementation Memory Size: \t{:.2f} KB ({} bytes)'.format(float(memorySize/2**10), int(memorySize)))
 print('Cost: \t\t\t\t${:.2f}'.format(cost))
 
-
 #print first 20 addresses and the length
+cacheDict = {}
+cacheAccesses = 0
+cacheHits = 0
+compulsoryMiss = 0
+conflictMiss = 0
 with open(file) as f:
-    num_of_address = 0
     for line in f:
-        if(line[:3] == "EIP" and num_of_address < 20):
-            """
+        if(line[:3] == "EIP" and line[10:18] != '00000000'):
             #Bytes to decimal
             length = str(int(math.pow(2,int(line[5:7])*8)-1))
-            hex_address = line[10:18] 
-            num_of_address += 1
-            print("0x{}: ({})".format(hex_address, length))
-            """
+            hex_address = line[10:18]
+
+            # Keep track of the index so that when it does change, new access
+            master_index = None
+            hex_address_binary = bin(int(hex_address, 16))[2:].zfill(len(hex_address)*4)
+            reads = int(line[5:7])
+            offsetSize = len(hex_address_binary) - tagBits - indexSize
+            for i in range(0,reads):
+                tag = hex_address_binary[:tagBits].zfill(4-(tagBits%4)+tagBits)
+                index = hex_address_binary[tagBits:tagBits+indexSize].zfill(4 -(indexSize%4)+indexSize)
+                offset = hex_address_binary[tagBits+indexSize:].zfill(4-(offsetSize%4)+offsetSize)
+                
+                # Check to see if it is a new cache access.
+                if master_index != index:
+                    cacheAccesses += 1
+                    
+                    # Checks to see if index has been accessed.
+                    if index not in cacheDict:
+                        cacheDict[index] = [tag]
+                        compulsoryMiss += 1
+                    else:
+                        
+                        # Checks to see if the tag is in the cache row.
+                        if tag not in cacheDict[index]:
+                            # Checks to see if the cache row is full.
+                            if len(cacheDict[index]) < associativity:
+                                # If LRU, sends index to the back of the array
+                                if policy == 'LRU':
+                                    cacheDict[index].pop(0)
+                                    cacheDict[index].append(tag)
+                                compulsoryMiss += 1
+                            else:
+                                # If RND, randomly selects element from row and pops it out.
+                                if policy == 'RND':
+                                    cacheDict[index].pop(randint(0,len(cacheDict[index] - 1)))
+                                else:
+                                    cacheDict[index].pop(0)
+                                    
+                                conflictMiss += 1
+                            cacheDict[index].append(tag)
+                        else:
+                            cacheHits += 1
+                master_index = index
+                hex_address_binary = bin(int(hex_address_binary, 2) + 1)[2:].zfill(len(hex_address)*4)
 
 print("\n\n***** Cache Calculated Values *****\n")
 
-print("Total Cache Accesses:\t{}".format(0))
-print("Cache Hits: \t{}".format(0))
-print("Cache Misses: \t\t{}".format(0))
-print("--- Compulsory Misses:\t{}".format(0))
-print("--- Conflict Misses:\t{}".format(0))
+print("Total Cache Accesses:\t{}".format(cacheAccesses))
+print("Cache Hits: \t{}".format(cacheHits))
+print("Cache Misses: \t\t{}".format(compulsoryMiss + conflictMiss))
+print("--- Compulsory Misses:\t{}".format(compulsoryMiss))
+print("--- Conflict Misses:\t{}".format(conflictMiss))
 
+
+hitRate = cacheHits / cacheAccesses
+missRate =  1 - hitRate
+cpi = 0
+# Convert blocksize to bits, recalulate overhead so that it is in bits, then convert to bytes
+overheadAndBlockSize = ((blockSize * 8) + (tagBits + 1)) / 8
+unusedKB = ((totBlocks - compulsoryMiss) * (overheadAndBlockSize)) / 1024
+unusedCacheSpace = unusedKB / (memorySize/2**10)
+waste = cost * unusedCacheSpace
 print("\n\n***** *****  CACHE MISS RATE:  ***** *****\n")
 
-print("Hit Rate:\t\t{}".format(0))
-print("CPI:\t\t\t{}".format(0))
-print("Unused Cache Space: {} KB / {} KB = {} %  Waste: {}".format(0, 0,0,0))
-print("Unused Cache Blocks:	{} / {}".format(0, 0))
+print("Hit Rate:\t\t{:.4f}%".format(hitRate * 100))
+print("Miss Rate:\t\t{:.4f}".format(missRate * 100))
+print("CPI:\t\t\t{:.2f} Cycles/Instruction".format(0))
+print("Unused Cache Space: {:.2f} KB / {} KB = {:.2f} %  Waste: ${:.2f}".format(unusedKB, memorySize/2**10, unusedCacheSpace * 100, waste))
+print("Unused Cache Blocks:	{} / {}".format(int(totBlocks - compulsoryMiss), int(totBlocks)))
