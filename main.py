@@ -101,9 +101,22 @@ cacheAccesses = 0
 cacheHits = 0
 compulsoryMiss = 0
 conflictMiss = 0
+cycleCount = 0
+instructionCount = 0
+
 with open(file) as f:
     for line in f:
+        if(line[6:14] != '00000000'):
+            cycleCount += 1;
+            # dstM is not empty +1 for cycle count 
+        if(line[33:41] != '00000000'):
+            cycleCount += 1;
+            # srcM is not empty +1 for cycle count
         if(line[:3] == "EIP" and line[10:18] != '00000000'):
+            instructionCount +=1
+            cycleCount += 2
+            # add 2 to cycle count for the instruction and 1 to the instruction count
+
             #Bytes to decimal
             length = str(int(math.pow(2,int(line[5:7])*8)-1))
             hex_address = line[10:18]
@@ -121,11 +134,11 @@ with open(file) as f:
                 # Check to see if it is a new cache access.
                 if master_index != index:
                     cacheAccesses += 1
-                    
                     # Checks to see if index has been accessed.
                     if index not in cacheDict:
                         cacheDict[index] = [tag]
                         compulsoryMiss += 1
+                        cycleCount += (3 * (reads - i))
                     else:
                         
                         # Checks to see if the tag is in the cache row.
@@ -137,6 +150,7 @@ with open(file) as f:
                                     cacheDict[index].pop(0)
                                     cacheDict[index].append(tag)
                                 compulsoryMiss += 1
+                                cycleCount += (3 * (reads - i))
                             else:
                                 # If RND, randomly selects element from row and pops it out.
                                 if policy == 'RND':
@@ -145,9 +159,11 @@ with open(file) as f:
                                     cacheDict[index].pop(0)
                                     
                                 conflictMiss += 1
+                                cycleCount += (3 * (reads - i))
                             cacheDict[index].append(tag)
                         else:
                             cacheHits += 1
+                            cycleCount += 1
                 master_index = index
                 hex_address_binary = bin(int(hex_address_binary, 2) + 1)[2:].zfill(len(hex_address)*4)
 
@@ -162,7 +178,7 @@ print("--- Conflict Misses:\t{}".format(conflictMiss))
 
 hitRate = cacheHits / cacheAccesses
 missRate =  1 - hitRate
-cpi = 0
+cpi = cycleCount/instructionCount
 # Convert blocksize to bits, recalulate overhead so that it is in bits, then convert to bytes
 overheadAndBlockSize = ((blockSize * 8) + (tagBits + 1)) / 8
 unusedKB = ((totBlocks - compulsoryMiss) * (overheadAndBlockSize)) / 1024
@@ -172,6 +188,6 @@ print("\n\n***** *****  CACHE MISS RATE:  ***** *****\n")
 
 print("Hit Rate:\t\t{:.4f}%".format(hitRate * 100))
 print("Miss Rate:\t\t{:.4f}".format(missRate * 100))
-print("CPI:\t\t\t{:.2f} Cycles/Instruction".format(0))
+print("CPI:\t\t\t{:.2f} Cycles/Instruction".format(cpi))
 print("Unused Cache Space: {:.2f} KB / {} KB = {:.2f} %  Waste: ${:.2f}".format(unusedKB, memorySize/2**10, unusedCacheSpace * 100, waste))
 print("Unused Cache Blocks:	{} / {}".format(int(totBlocks - compulsoryMiss), int(totBlocks)))
