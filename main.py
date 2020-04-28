@@ -101,9 +101,115 @@ cacheAccesses = 0
 cacheHits = 0
 compulsoryMiss = 0
 conflictMiss = 0
+lineNum = 0
 with open(file) as f:
+    hex_address = None
+    length = None
     for line in f:
+        lineNum += 1
+        if line[:4] == 'dstM' and hex_address != None and length != None:
+            dstM = line[6:14]
+            srcM = line[33:41]
+            
+            if dstM != "00000000":
+                master_index = None
+                hex_address_binary = bin(int(dstM, 16))[2:].zfill(len(hex_address)*4)
+                offsetSize = len(hex_address_binary) - tagBits - indexSize
+                for i in range(0,4):
+                    tag = hex_address_binary[:tagBits].zfill(4-(tagBits%4)+tagBits)
+                    index = hex_address_binary[tagBits:tagBits+indexSize].zfill(4 -(indexSize%4)+indexSize)
+                    offset = hex_address_binary[tagBits+indexSize:].zfill(4-(offsetSize%4)+offsetSize)
+                    
+                    # Check to see if it is a new cache access.
+                if master_index != index:
+                    cacheAccesses += 1
+                    # Checks to see if index has been accessed.
+                    if index not in cacheDict:
+                        cacheDict[index] = [tag]
+                        compulsoryMiss += 1
+                    else:
+                        # Checks to see if the tag is in the cache row.
+                        if tag not in cacheDict[index]:
+                            # Checks to see if the cache row is full.
+                            if len(cacheDict[index]) < associativity:
+                                # If LRU, sends index to the back of the array
+                                if policy == 'LRU':
+                                    cacheDict[index].pop(0)
+                                    cacheDict[index].append(tag)
+                                compulsoryMiss += 1
+                            else:
+                                # If RND, randomly selects element from row and pops it out.
+                                if policy == 'RND':
+                                    cacheDict[index].pop(randint(0,len(cacheDict[index] - 1)))
+                                else:
+                                    cacheDict[index].pop(0)
+                                    
+                                conflictMiss += 1
+                            cacheDict[index].append(tag)
+                        else:
+                            cacheHits += 1
+                master_index = index
+                hex_address_binary = bin(int(hex_address_binary, 2) + 1)[2:].zfill(len(hex_address)*4)
+
+            if srcM != "00000000":
+                master_index = None
+                hex_address_binary = bin(int(srcM, 16))[2:].zfill(len(hex_address)*4)
+                offsetSize = len(hex_address_binary) - tagBits - indexSize
+                for i in range(0,4):
+                    tag = hex_address_binary[:tagBits].zfill(4-(tagBits%4)+tagBits)
+                    index = hex_address_binary[tagBits:tagBits+indexSize].zfill(4 -(indexSize%4)+indexSize)
+                    offset = hex_address_binary[tagBits+indexSize:].zfill(4-(offsetSize%4)+offsetSize)
+                    
+                    # Check to see if it is a new cache access.
+                if master_index != index:
+                    cacheAccesses += 1
+                    #print("{}||{}".format(lineNum,cacheAccesses))
+                    # Checks to see if index has been accessed.
+                    if index not in cacheDict:
+                        cacheDict[index] = [tag]
+                        compulsoryMiss += 1
+                    else:
+                        
+                        # Checks to see if the tag is in the cache row.
+                        if tag not in cacheDict[index]:
+                            # Checks to see if the cache row is full.
+                            if len(cacheDict[index]) < associativity:
+                                # If LRU, sends index to the back of the array
+                                if policy == 'LRU':
+                                    cacheDict[index].pop(0)
+                                    cacheDict[index].append(tag)
+                                compulsoryMiss += 1
+                            else:
+                                # If RND, randomly selects element from row and pops it out.
+                                if policy == 'RND':
+                                    cacheDict[index].pop(randint(0,len(cacheDict[index] - 1)))
+                                else:
+                                    cacheDict[index].pop(0)
+                                    
+                                conflictMiss += 1
+                            cacheDict[index].append(tag)
+                        else:
+                            cacheHits += 1
+                master_index = index
+                hex_address_binary = bin(int(hex_address_binary, 2) + 1)[2:].zfill(len(hex_address)*4)
+                
         if(line[:3] == "EIP" and line[10:18] != '00000000'):
+            hex_address = int(line[10:18], 16)
+            length = int(line[5:7])
+            """
+            hex_address = line[10:18]
+            hex_address = int(hex_address, 16)
+            bitmask = blockSize - 1
+            reads = int(line[5:7])
+            tmp = reads & bitmask
+            tmp2 = tmp + 4
+            cacheAccesses += 1
+            if tmp2 > blockSize:
+                cacheAccesses += 1
+            if tmp2 > (2 * blockSize):
+                cacheAccesses += 1
+                """
+            #print(tmp2)
             #Bytes to decimal
             length = str(int(math.pow(2,int(line[5:7])*8)-1))
             hex_address = line[10:18]
@@ -121,7 +227,7 @@ with open(file) as f:
                 # Check to see if it is a new cache access.
                 if master_index != index:
                     cacheAccesses += 1
-                    
+                    #print("{}||{}".format(lineNum,cacheAccesses))
                     # Checks to see if index has been accessed.
                     if index not in cacheDict:
                         cacheDict[index] = [tag]
@@ -151,6 +257,7 @@ with open(file) as f:
                 master_index = index
                 hex_address_binary = bin(int(hex_address_binary, 2) + 1)[2:].zfill(len(hex_address)*4)
 
+                
 print("\n\n***** Cache Calculated Values *****\n")
 
 print("Total Cache Accesses:\t{}".format(cacheAccesses))
