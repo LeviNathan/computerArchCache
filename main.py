@@ -42,8 +42,8 @@ try:
     blockSize = int(blockSize)
 except ValueError:
     sys.exit("Error: Invalid block size, make sure it is an integer.")
-if blockSize < 4 or blockSize > 64:
-    sys.exit("Error: Block size out of range. 4 to 16 bytes")
+if blockSize < 2 or blockSize > 64:
+    sys.exit("Error: Block size out of range. 4 to 64 bytes")
 
 
 associativity = sys.argv[sys.argv.index('-a') + 1]
@@ -106,12 +106,15 @@ instructionCount = 0
 
 with open(file) as f:
     for line in f:
-        if(line[6:14] != '00000000'):
-            cycleCount += 1;
-            # dstM is not empty +1 for cycle count 
-        if(line[33:41] != '00000000'):
-            cycleCount += 1;
-            # srcM is not empty +1 for cycle count
+        if line[0:4] == "dstM":
+            if(line[6:14] != '00000000'):
+                cycleCount += 1;
+                cycleCount += (3*4)
+                # dstM is not empty +1 for cycle count 
+            if(line[33:41] != '00000000'):
+                cycleCount += 1;
+                cycleCount += (3*4)
+                # srcM is not empty +1 for cycle count
         if(line[:3] == "EIP" and line[10:18] != '00000000'):
             instructionCount +=1
             cycleCount += 2
@@ -166,7 +169,6 @@ with open(file) as f:
                             cycleCount += 1
                 master_index = index
                 hex_address_binary = bin(int(hex_address_binary, 2) + 1)[2:].zfill(len(hex_address)*4)
-
 print("\n\n***** Cache Calculated Values *****\n")
 
 print("Total Cache Accesses:\t{}".format(cacheAccesses))
