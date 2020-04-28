@@ -4,35 +4,35 @@ Trace File: data\A-9_new_1.5.pdf.trc
 
 ***** Cache Input Parameters ***** 
 
-Cache Size: 			1024 KB
-Block Size: 			16 bytes
-Associativity: 			1
+Cache Size: 			256 KB
+Block Size: 			8 bytes
+Associativity: 			8
 Replacement Policy: 		Round Robin
 
 ***** Cache Calculated Values *****
 
-Total # Blocks: 		65536
-Tag Size: 			12 bits
-Index Size: 			16 bits
-Total # Rows: 			65536
-Overhead Memory Size: 		106496 bytes
-Implementation Memory Size: 	1128.00 KB (1155072 bytes)
-Cost: 				$56.40
+Total # Blocks: 		32768
+Tag Size: 			17 bits
+Index Size: 			12 bits
+Total # Rows: 			4096
+Overhead Memory Size: 		73728 bytes
+Implementation Memory Size: 	328.00 KB (335872 bytes)
+Cost: 				$16.40
 
 
 ***** Cache Calculated Values *****
 
-Total Cache Accesses:	386511
-Cache Hits: 	373346
-Cache Misses: 		13165
---- Compulsory Misses:	11448
---- Conflict Misses:	1717
+Total Cache Accesses:	417261
+Cache Hits: 	395361
+Cache Misses: 		21900
+--- Compulsory Misses:	21197
+--- Conflict Misses:	703
 
 
 ***** *****  CACHE MISS RATE:  ***** *****
 
-Hit Rate:		96.5939%
-Miss Rate:		3.4061
-CPI:			0.00 Cycles/Instruction
-Unused Cache Space: 930.96 KB / 1128.0 KB = 82.53 %  Waste: $46.55
-Unused Cache Blocks:	54088 / 65536
+Hit Rate:		94.7515%
+Miss Rate:		5.2485
+CPI:			8.16 Cycles/Instruction
+Unused Cache Space: 115.82 KB / 328.0 KB = 35.31 %  Waste: $5.79
+Unused Cache Blocks:	11571 / 32768
