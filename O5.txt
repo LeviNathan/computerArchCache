@@ -1,4 +1,4 @@
-Cache Simulator - CS 3853 - Team 12
+Cache Simulator CS 3853 Spring 2020 - Group #12
 
 Trace File: data\A-9_new_1.5.pdf.trc
 
@@ -20,7 +20,7 @@ Implementation Memory Size: 	328.00 KB (335872 bytes)
 Cost: 				$16.40
 
 
-***** Cache Calculated Values *****
+***** CACHE SIMULATION RESULTS *****
 
 Total Cache Accesses:	417261
 Cache Hits: 	395361
@@ -29,10 +29,10 @@ Cache Misses: 		21900
 --- Conflict Misses:	703
 
 
-***** *****  CACHE MISS RATE:  ***** *****
+***** ***** CACHE HIT & MISS RATE: ***** ***** 
 
 Hit Rate:		94.7515%
 Miss Rate:		5.2485%
 CPI:			4.20 Cycles/Instruction
-Unused Cache Space: 115.82 KB / 328.0 KB = 35.31 %  Waste: $5.79
+Unused Cache Space: 115.82 KB / 328.0 KB = 35.31%  Waste: $5.79
 Unused Cache Blocks:	11571 / 32768

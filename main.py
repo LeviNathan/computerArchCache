@@ -64,7 +64,7 @@ if '-r' in sys.argv:
     else:
         policy = policyDict[sys.argv[sys.argv.index('-r') + 1]]
 
-print("Cache Simulator - CS 3853 - Team 12\n")
+print("Cache Simulator CS 3853 Spring 2020 - Group #12\n")
 print('Trace File: {}'.format(file))
 print("\n***** Cache Input Parameters ***** \n")
 print('Cache Size: \t\t\t{} KB'.format(cacheSize))
@@ -249,7 +249,7 @@ with open(file) as f:
                 master_index = index
                 hex_address_binary = bin(int(hex_address_binary, 2) + 1)[2:].zfill(len(hex_address)*4)
 
-print("\n\n***** Cache Calculated Values *****\n")
+print("\n\n***** CACHE SIMULATION RESULTS *****\n")
 
 print("Total Cache Accesses:\t{}".format(cacheAccesses))
 print("Cache Hits: \t{}".format(cacheHits))
@@ -266,10 +266,10 @@ overheadAndBlockSize = ((blockSize * 8) + (tagBits + 1)) / 8
 unusedKB = ((totBlocks - compulsoryMiss) * (overheadAndBlockSize)) / 1024
 unusedCacheSpace = unusedKB / (memorySize/2**10)
 waste = cost * unusedCacheSpace
-print("\n\n***** *****  CACHE MISS RATE:  ***** *****\n")
+print("\n\n***** ***** CACHE HIT & MISS RATE: ***** ***** \n")
 
 print("Hit Rate:\t\t{:.4f}%".format(hitRate * 100))
 print("Miss Rate:\t\t{:.4f}%".format(missRate * 100))
 print("CPI:\t\t\t{:.2f} Cycles/Instruction".format(cpi))
-print("Unused Cache Space: {:.2f} KB / {} KB = {:.2f} %  Waste: ${:.2f}".format(unusedKB, memorySize/2**10, unusedCacheSpace * 100, waste))
+print("Unused Cache Space: {:.2f} KB / {} KB = {:.2f}%  Waste: ${:.2f}".format(unusedKB, memorySize/2**10, unusedCacheSpace * 100, waste))
 print("Unused Cache Blocks:	{} / {}".format(int(totBlocks - compulsoryMiss), int(totBlocks)))
