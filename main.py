@@ -113,6 +113,7 @@ with open(file) as f:
             srcM = line[33:41]
             if dstM != "00000000":
                 master_index = None
+                cycleCount += 1
                 hex_address_binary = bin(int(dstM, 16))[2:].zfill(len(hex_address)*4)
                 offsetSize = len(hex_address_binary) - tagBits - indexSize
                 for i in range(0,4):
@@ -154,6 +155,7 @@ with open(file) as f:
 
             if srcM != "00000000":
                 master_index = None
+                cycleCount += 1
                 hex_address_binary = bin(int(srcM, 16))[2:].zfill(len(hex_address)*4)
                 offsetSize = len(hex_address_binary) - tagBits - indexSize
                 for i in range(0,4):
