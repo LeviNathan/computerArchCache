@@ -67,10 +67,10 @@ if '-r' in sys.argv:
 print("Cache Simulator CS 3853 Spring 2020 - Group #12\n")
 print('Trace File: {}'.format(file))
 print("\n***** Cache Input Parameters ***** \n")
-print('Cache Size: \t\t\t\t\t{} KB'.format(cacheSize))
-print('Block Size: \t\t\t\t\t{} bytes'.format(blockSize))
-print('Associativity: \t\t\t\t\t{}'.format(associativity))
-print('Replacement Policy: \t\t\t{}'.format(policy))
+print('Cache Size: \t\t\t{} KB'.format(cacheSize))
+print('Block Size: \t\t\t{} bytes'.format(blockSize))
+print('Associativity: \t\t\t{}'.format(associativity))
+print('Replacement Policy: \t\t{}'.format(policy))
 
 powerOf2 = [2 ** x  for x in range(0,28)]
 
@@ -87,13 +87,13 @@ cost = (cacheSize + overheadSize/2**10) * 0.05
 
 print("\n***** Cache Calculated Values *****\n")
 
-print('Total # Blocks: \t\t\t\t{}'.format(int(totBlocks)))
-print('Tag Size: \t\t\t\t\t\t{} bits'.format(tagBits))
-print('Index Size: \t\t\t\t\t{} bits'.format(indexSize))
-print('Total # Rows: \t\t\t\t\t{}'.format(int(totRows)))
-print('Overhead Memory Size: \t\t\t{} bytes'.format(int(overheadSize)))
+print('Total # Blocks: \t\t{}'.format(int(totBlocks)))
+print('Tag Size: \t\t\t{} bits'.format(tagBits))
+print('Index Size: \t\t\t{} bits'.format(indexSize))
+print('Total # Rows: \t\t\t{}'.format(int(totRows)))
+print('Overhead Memory Size: \t\t{} bytes'.format(int(overheadSize)))
 print('Implementation Memory Size: \t{:.2f} KB ({} bytes)'.format(float(memorySize/2**10), int(memorySize)))
-print('Cost: \t\t\t\t\t\t\t${:.2f}'.format(cost))
+print('Cost: \t\t\t\t${:.2f}'.format(cost))
 
 #print first 20 addresses and the length
 cacheDict = {}
@@ -254,10 +254,10 @@ with open(file) as f:
 print("\n\n***** CACHE SIMULATION RESULTS *****\n")
 
 print("Total Cache Accesses:\t{}".format(cacheAccesses))
-print("Cache Hits: \t\t\t{}".format(cacheHits))
-print("Cache Misses: \t\t\t{}".format(compulsoryMiss + conflictMiss))
-print("--- Compulsory Misses:\t\t{}".format(compulsoryMiss))
-print("--- Conflict Misses:\t\t{}".format(conflictMiss))
+print("Cache Hits: \t\t{}".format(cacheHits))
+print("Cache Misses: \t\t{}".format(compulsoryMiss + conflictMiss))
+print("--- Compulsory Misses: \t\t{}".format(compulsoryMiss))
+print("--- Conflict Misses: \t\t{}".format(conflictMiss))
 
 
 hitRate = cacheHits / cacheAccesses
@@ -270,8 +270,8 @@ unusedCacheSpace = unusedKB / (memorySize/2**10)
 waste = cost * unusedCacheSpace
 print("\n\n***** ***** CACHE HIT & MISS RATE: ***** ***** \n")
 
-print("Hit Rate:\t\t\t\t{:.4f}%".format(hitRate * 100))
-print("Miss Rate:\t\t\t\t{:.4f}%".format(missRate * 100))
-print("CPI:\t\t\t\t\t{:.2f} Cycles/Instruction".format(cpi))
+print("Hit Rate:\t\t{:.4f}%".format(hitRate * 100))
+print("Miss Rate:\t\t{:.4f}%".format(missRate * 100))
+print("CPI:\t\t\t{:.2f} Cycles/Instruction".format(cpi))
 print("Unused Cache Space: \t{:.2f} KB / {} KB = {:.2f}%  Waste: ${:.2f}".format(unusedKB, memorySize/2**10, unusedCacheSpace * 100, waste))
 print("Unused Cache Blocks:	{} / {}".format(int(totBlocks - compulsoryMiss), int(totBlocks)))
