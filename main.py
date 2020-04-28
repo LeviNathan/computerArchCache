@@ -164,7 +164,6 @@ with open(file) as f:
                     # Check to see if it is a new cache access.
                 if master_index != index:
                     cacheAccesses += 1
-                    #print("{}||{}".format(lineNum,cacheAccesses))
                     # Checks to see if index has been accessed.
                     if index not in cacheDict:
                         cacheDict[index] = [tag]
@@ -200,7 +199,6 @@ with open(file) as f:
             length = int(line[5:7])
             instructionCount +=1
             cycleCount += 2
-            # add 2 to cycle count for the instruction and 1 to the instruction count
             #Bytes to decimal
             length = str(int(math.pow(2,int(line[5:7])*8)-1))
             hex_address = line[10:18]
