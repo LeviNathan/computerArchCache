@@ -112,8 +112,6 @@ with open(file) as f:
             dstM = line[6:14]
             srcM = line[33:41]
             if dstM != "00000000":
-                cycleCount += 1
-                cycleCount += (3*4)
                 master_index = None
                 hex_address_binary = bin(int(dstM, 16))[2:].zfill(len(hex_address)*4)
                 offsetSize = len(hex_address_binary) - tagBits - indexSize
@@ -145,17 +143,16 @@ with open(file) as f:
                                     cacheDict[index].pop(randint(0,len(cacheDict[index] - 1)))
                                 else:
                                     cacheDict[index].pop(0)
-                                    
                                 conflictMiss += 1
+                            cycleCount += (3*4)
                             cacheDict[index].append(tag)
                         else:
+                            cycleCount += 1
                             cacheHits += 1
                 master_index = index
                 hex_address_binary = bin(int(hex_address_binary, 2) + 1)[2:].zfill(len(hex_address)*4)
 
             if srcM != "00000000":
-                cycleCount += 1
-                cycleCount += (3*4)
                 master_index = None
                 hex_address_binary = bin(int(srcM, 16))[2:].zfill(len(hex_address)*4)
                 offsetSize = len(hex_address_binary) - tagBits - indexSize
@@ -189,11 +186,12 @@ with open(file) as f:
                                     cacheDict[index].pop(randint(0,len(cacheDict[index] - 1)))
                                 else:
                                     cacheDict[index].pop(0)
-                                    
                                 conflictMiss += 1
                             cacheDict[index].append(tag)
+                            cycleCount += (3*4)
                         else:
                             cacheHits += 1
+                            cycleCount += 1
                 master_index = index
                 hex_address_binary = bin(int(hex_address_binary, 2) + 1)[2:].zfill(len(hex_address)*4)
                 
@@ -273,7 +271,7 @@ waste = cost * unusedCacheSpace
 print("\n\n***** *****  CACHE MISS RATE:  ***** *****\n")
 
 print("Hit Rate:\t\t{:.4f}%".format(hitRate * 100))
-print("Miss Rate:\t\t{:.4f}".format(missRate * 100))
+print("Miss Rate:\t\t{:.4f}%".format(missRate * 100))
 print("CPI:\t\t\t{:.2f} Cycles/Instruction".format(cpi))
 print("Unused Cache Space: {:.2f} KB / {} KB = {:.2f} %  Waste: ${:.2f}".format(unusedKB, memorySize/2**10, unusedCacheSpace * 100, waste))
 print("Unused Cache Blocks:	{} / {}".format(int(totBlocks - compulsoryMiss), int(totBlocks)))

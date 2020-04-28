@@ -32,7 +32,7 @@ Cache Misses: 		21865
 ***** *****  CACHE MISS RATE:  ***** *****
 
 Hit Rate:		94.7599%
-Miss Rate:		5.2401
-CPI:			8.16 Cycles/Instruction
+Miss Rate:		5.2401%
+CPI:			4.16 Cycles/Instruction
 Unused Cache Space: 1079.94 KB / 1296.0 KB = 83.33 %  Waste: $54.00
 Unused Cache Blocks:	109221 / 131072
